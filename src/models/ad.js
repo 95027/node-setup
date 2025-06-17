@@ -9,6 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Advertiser, {
+        foreignKey: "advertiserId",
+      });
+
+      this.hasMany(models.AdRule, {
+        foreignKey: "adId",
+      });
+
+      this.hasOne(models.AdMetric, {
+        foreignKey: "adId",
+      });
     }
   }
   Ad.init(
@@ -24,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       redirectUrl: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      mediaUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       placement: {
         type: DataTypes.STRING,

@@ -17,6 +17,11 @@ const auth = (role = null) => {
       req.role = decoded.role;
       next();
     } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(401).json({ message: "Token expired" });
+      } else if (error.name === "JsonWebTokenError") {
+        return res.status(401).json({ message: "Invalid token" });
+      }
       next(error);
     }
   };
