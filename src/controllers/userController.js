@@ -1,8 +1,13 @@
+const redisClient = require("../utils/redis");
 const { User } = require("../models");
 
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({ where: { role: req.role } });
+
+    if (req.cacheKey && req.ttl) {
+      await redisClient.setEx(req.cacheKey, req.ttl, JSON.stringify(users));
+    }
     res.status(200).json({ message: "Users fetched successfully", users });
   } catch (error) {
     next(error);
