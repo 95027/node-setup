@@ -3,6 +3,7 @@ const { User } = require("../models");
 const bcrypt = require("bcrypt");
 const sendEmail = require("../utils/mail");
 const { forgotTemp } = require("../helpers/emailTemplates");
+const publishEvent = require("../utils/event");
 
 const register = async (req, res, next) => {
   try {
@@ -44,6 +45,12 @@ const login = async (req, res, next) => {
         expiresIn: process.env.JWT_EXPIRES_IN,
       }
     );
+
+    await publishEvent("activityEventQueue", {
+      type: "LOGIN",
+      userId: user.id,
+    });
+
     res.status(200).json({ message: "User Logged In successfully", token });
   } catch (error) {
     next(error);
