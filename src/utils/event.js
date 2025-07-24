@@ -1,4 +1,4 @@
-const client = require("./redis");
+const client = require("./redis/redis");
 
 const publishEvent = async (queueName, event) => {
   await client.lPush(queueName, JSON.stringify(event));

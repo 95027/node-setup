@@ -1,5 +1,5 @@
 const { activityLogger } = require("./src/helpers/jobs");
-const client = require("./src/utils/redis");
+const client = require("./src/utils/redis/redis");
 
 async function listenToQueue(queueName, handler) {
   console.log(`Listening to ${queueName}....`);

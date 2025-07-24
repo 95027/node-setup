@@ -1,4 +1,4 @@
-const redisClient = require("../utils/redis");
+const redisClient = require("../utils/redis/redis");
 const { User } = require("../models");
 
 const getAllUsers = async (req, res, next) => {

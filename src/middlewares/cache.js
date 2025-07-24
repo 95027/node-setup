@@ -1,4 +1,4 @@
-const redisClient = require("../utils/redis");
+const redisClient = require("../utils/redis/redis");
 
 const cache = (keyPrefix, ttl = 60 * 10) => {
   return async (req, res, next) => {

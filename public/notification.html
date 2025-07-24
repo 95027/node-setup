@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket.IO Web Notification Test</title>
+  </head>
+  <body>
+    <h2>🔔 Real-Time Notifications</h2>
+    <ul id="notifications"></ul>
+
+    <!-- Load Socket.IO client from server -->
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io("http://localhost:4000");
+
+      // Ask permission for Web Notifications
+      Notification.requestPermission().then((permission) => {
+        if (permission !== "granted") {
+          console.warn("🔒 Browser notification permission denied");
+        }
+      });
+
+      socket.on("connect", () => {
+        console.log("✅ Connected to server:", socket.id);
+      });
+
+      socket.on("notification", (data) => {
+        console.log("📩 Notification received:", data);
+
+        // 1. Show Web Notification (if permitted)
+        if (Notification.permission === "granted") {
+          new Notification(data.title || "New Notification", {
+            body: `Received at ${data.time}`,
+            icon: "/favicon.ico", // optional
+          });
+        } else {
+          // 2. Fallback alert if permission not granted
+          alert(`${data.title} at ${data.time}`);
+        }
+
+        // 3. Update UI List
+        const list = document.getElementById("notifications");
+        const item = document.createElement("li");
+        item.textContent = `${data.time} - ${data.title}`;
+        list.appendChild(item);
+      });
+    </script>
+  </body>
+</html>
