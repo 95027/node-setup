@@ -1,6 +1,6 @@
 const express = require("express");
-const { sequelize } = require("./src/models");
 require("dotenv").config();
+const { sequelize } = require("./src/models");
 const routes = require("./src/routes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -32,7 +32,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 
 sequelize
-  .sync({ alter: false })
+  .sync({ alter: true })
   .then(async () => {
     // await setSocket(server);
     server.listen(PORT, () => console.log(`Server is running on ${PORT}`));
